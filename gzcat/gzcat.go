@@ -1,7 +1,6 @@
 package main
 
 import (
-	"archive/tar"
 	"compress/gzip"
 	"fmt"
 	"io"
@@ -26,15 +25,11 @@ func zgCat(fileName string) (err error) {
 	}
 	defer gzfile.Close()
 
-	trfile, err := gzip.NewReader(gzfile)
+	file, err := gzip.NewReader(gzfile)
 
 	if err != nil {
 		return
 	}
-
-	defer trfile.Close()
-
-	file := tar.NewReader(trfile)
 
 	_, err = io.Copy(os.Stdout, file)
 	return err
