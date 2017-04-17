@@ -52,7 +52,7 @@ func main() {
 
 }
 
-func grep(reader io.Reader, filename string, re *regexp.Regexp) (err error) {
+func grep(reader io.Reader, filename string, re *regexp.Regexp) error {
 	linenum := 0
 	scanner := bufio.NewScanner(reader)
 
