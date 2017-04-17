@@ -6,8 +6,6 @@ import (
 	"os"
 )
 
-var data interface{}
-
 func main() {
 
 	if len(os.Args[1:]) != 1 {
@@ -23,6 +21,8 @@ func main() {
 	}
 
 	defer file.Close()
+
+	var data interface{}
 
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(&data)

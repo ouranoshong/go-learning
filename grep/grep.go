@@ -7,7 +7,6 @@ import (
 	"io"
 	"os"
 	"regexp"
-	"strconv"
 )
 
 var invertMatch = flag.Bool("v", false, "Selected lines are those not matching any of the specified patterns.")
@@ -15,32 +14,11 @@ var caseInsensitive = flag.Bool("i", false, "Perform case insensitive matching."
 var showLineNumber = flag.Bool("n", false, "Each output line is preceded by its relative line number in the file, starting at line 1.")
 
 func main() {
-
-	// fmt.Println(re.MatchString("AB"))
-
 	flag.Parse()
 	args := flag.Args()
 
-	// fmt.Println("inverMatch", *invertMatch)
-	// fmt.Println("caseInsensitive", *caseInsensitive)
-	// fmt.Println("showLineNumber", *showLineNumber)
-	// fmt.Println("args", args)
-
-	// os.Stdin
-
-	// if len(args) >= 1 {
-
-	// } else {
-	// 		scanner := bufio.NewScanner(os.Stdin)
-	// 	linenum := 0
-	// 	for scanner.Scan() {
-	// 		linenum++
-	// 	fmt.Println(scanner.Text())
-	// }
-
-	if (*showLineNumber != true) && (len(args) == 0) {
-		fmt.Fprintln(os.Stderr, "Usage: grep.go [flag] pattern [file]")
-		flag.Usage()
+	if len(args) == 0 {
+		flag.PrintDefaults()
 		return
 	}
 
@@ -62,19 +40,19 @@ func main() {
 				continue
 			}
 
-			grep(file, filename, re, len(args))
+			grep(file, filename, re)
 
 			file.Close()
 		}
 
 	} else {
 
-		grep(os.Stdin, "", re, len(args))
+		grep(os.Stdin, "", re)
 	}
 
 }
 
-func grep(reader io.Reader, filename string, re *regexp.Regexp, arglen int) {
+func grep(reader io.Reader, filename string, re *regexp.Regexp) (err error) {
 	linenum := 0
 	scanner := bufio.NewScanner(reader)
 
@@ -82,27 +60,24 @@ func grep(reader io.Reader, filename string, re *regexp.Regexp, arglen int) {
 		linenum++
 		line := scanner.Text()
 
-		if *showLineNumber {
-			line = strconv.Itoa(linenum) + ":" + line
+		match := re.MatchString(line)
+
+		if *invertMatch {
+			match = !match
 		}
 
-		if *showLineNumber && (filename != "") {
-			line = filename + ":" + line
-		}
+		if match {
+			if *showLineNumber {
+				if filename != "" {
+					fmt.Printf("%s:%d:", filename, linenum)
+				} else {
+					fmt.Printf("%d:", linenum)
+				}
+			}
 
-		switch true {
-		case arglen == 0 && *showLineNumber:
-			fallthrough
-		case arglen >= 1 && *invertMatch && !re.MatchString(line):
-			fallthrough
-		case arglen >= 1 && !*invertMatch && re.MatchString(line):
 			fmt.Println(line)
-		default:
-			break
 		}
 	}
 
-	if err := scanner.Err(); err != nil {
-		fmt.Fprintln(os.Stderr, "reading standard input:", err)
-	}
+	return scanner.Err()
 }

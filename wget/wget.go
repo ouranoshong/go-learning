@@ -25,7 +25,9 @@ func main() {
 
 	defer resp.Body.Close()
 
-	file, err := os.OpenFile(filename, os.O_CREATE|os.O_RDWR, 0660)
+	file, err := os.Create(filename)
+
+	// file, err := os.OpenFile(filename, os.O_CREATE|os.O_TRUNC|os.O_RDWR, 0660)
 
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
