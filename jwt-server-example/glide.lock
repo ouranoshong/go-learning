@@ -1,0 +1,8 @@
+hash: fe5f3f040321c102866402dda49fd811a785aa25c75c3539cbd94c0791ff82e0
+updated: 2017-04-23T16:38:04.34017922+08:00
+imports:
+- name: github.com/dgrijalva/jwt-go
+  version: d2709f9f1f31ebcda9651b03077758c1f3a0018c
+- name: github.com/gorilla/context
+  version: 1ea25387ff6f684839d82767c1733ff4d4d15d0a
+testImports: []
