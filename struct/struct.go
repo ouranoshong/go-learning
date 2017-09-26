@@ -4,22 +4,22 @@ import (
 	"fmt"
 )
 
-// Test struct
-type Test struct {
+// Text struct
+type Text struct {
 	name string
 }
 
-func (t *Test) setName(name string) {
+func (t *Text) setName(name string) {
 	t.name = name
 }
 
-func (t Test) say() {
+func (t Text) say() {
 	fmt.Printf("Hello, %s\n", t.name)
 }
 
 func main() {
-	Ming := Test{"ming ming"}
-	XiaoXiao := Test{"Xiao Xiao"}
+	Ming := Text{"ming ming"}
+	XiaoXiao := Text{"Xiao Xiao"}
 
 	Ming.setName("change name")
 	Ming.say()
